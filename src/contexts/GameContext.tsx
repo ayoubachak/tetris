@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
-import { GameState, GameAction, GameSettings } from '../types/tetris.types';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef, useState } from 'react';
+import { GameState, GameAction, GameSettings, AISettings } from '../types/tetris.types';
 import GameService from '../services/game.service';
 import StorageService from '../services/storage.service';
+import AIService from '../services/ai.service';
 import tetrisSound from '../assets/sound/tetris.mp3';
 
 interface GameContextType {
@@ -11,6 +12,8 @@ interface GameContextType {
   settings: GameSettings;
   updateSettings: (settings: Partial<GameSettings>) => void;
   playMusic: () => void;
+  updateAISettings: (aiSettings: Partial<AISettings>) => void;
+  toggleAI: (enabled: boolean) => void;
 }
 
 // Create the context with undefined as default value
@@ -62,7 +65,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       
     case 'RESTART':
     case 'NEW_GAME':
-      return GameService.createInitialState(action.settings);
+      return {
+        ...GameService.createInitialState(action.settings),
+        isAIActive: state.isAIActive
+      };
+      
+    case 'TOGGLE_AI':
+      return { ...state, isAIActive: action.enabled };
       
     default:
       return state;
@@ -76,15 +85,21 @@ interface GameProviderProps {
 // Provider component for the game context
 export function GameProvider({ children }: GameProviderProps) {
   // Get settings from storage
-  const [settings, setSettings] = React.useState<GameSettings>(
+  const [settings, setSettings] = useState<GameSettings>(
     StorageService.getSettings()
   );
   
   // Initialize game state
   const [state, dispatch] = useReducer(
     gameReducer,
-    GameService.createInitialState(settings)
+    {
+      ...GameService.createInitialState(settings),
+      isAIActive: false,
+    }
   );
+  
+  // AI move delay timer ref
+  const aiMoveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Update game settings
   const updateSettings = useCallback((newSettings: Partial<GameSettings>) => {
@@ -94,6 +109,54 @@ export function GameProvider({ children }: GameProviderProps) {
       return updated;
     });
   }, []);
+  
+  // Update AI settings specifically
+  const updateAISettings = useCallback((aiSettings: Partial<AISettings>) => {
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        ai: {
+          ...prev.ai,
+          ...aiSettings
+        }
+      };
+      StorageService.saveSettings(updated);
+      return updated;
+    });
+  }, []);
+  
+  // Toggle AI
+  const toggleAI = useCallback((enabled: boolean) => {
+    dispatch({ type: 'TOGGLE_AI', enabled });
+  }, []);
+  
+  // AI Logic
+  useEffect(() => {
+    // Only run if AI is active and game is not over or paused
+    if (state.isAIActive && !state.gameOver && !state.isPaused) {
+      // Clear any existing timer
+      if (aiMoveTimer.current) {
+        clearTimeout(aiMoveTimer.current);
+      }
+      
+      aiMoveTimer.current = setTimeout(() => {
+        // Calculate best move
+        const bestMove = AIService.getBestMove(state, settings.ai);
+        
+        if (bestMove) {
+          // Execute the next action for the current move
+          const action = AIService.executeMove(state, bestMove);
+          dispatch(action);
+        }
+      }, settings.ai.moveDelay);
+    }
+    
+    return () => {
+      if (aiMoveTimer.current) {
+        clearTimeout(aiMoveTimer.current);
+      }
+    };
+  }, [state, settings.ai]);
   
   // Apply theme class on root element
   useEffect(() => {
@@ -129,6 +192,9 @@ export function GameProvider({ children }: GameProviderProps) {
       audioRef.current.play().catch(() => {});
       if (state.gameOver) return;
       
+      // Don't handle keyboard events if AI is active
+      if (state.isAIActive) return;
+      
       const { controls } = settings;
       
       switch (event.code) {
@@ -161,7 +227,7 @@ export function GameProvider({ children }: GameProviderProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [state.gameOver, state.isPaused, settings]);
+  }, [state.gameOver, state.isPaused, state.isAIActive, settings]);
   
   // Game loop
   useEffect(() => {
@@ -281,7 +347,9 @@ export function GameProvider({ children }: GameProviderProps) {
         renderGrid,
         settings,
         updateSettings,
-        playMusic: () => { audioRef.current.play().catch(() => {}); }
+        playMusic: () => { audioRef.current.play().catch(() => {}); },
+        updateAISettings,
+        toggleAI
       }}
     >
       {children}

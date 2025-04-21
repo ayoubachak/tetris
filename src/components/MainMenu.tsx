@@ -10,7 +10,7 @@ interface MainMenuProps {
 }
 
 const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
-  const { dispatch, settings, updateSettings, playMusic } = useGame();
+  const { dispatch, settings, updateSettings, playMusic, toggleAI } = useGame();
   const [view, setView] = useState<MenuView>('main');
   const [startLevel, setStartLevel] = useState(settings.startLevel);
   const [showGhost, setShowGhost] = useState(settings.showGhostPiece);
@@ -54,6 +54,35 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
         showGhostPiece: showGhost
       }
     });
+    
+    // Disable AI mode for manual play
+    toggleAI(false);
+    
+    // Switch to game view
+    onStartGame();
+  };
+  
+  const handleStartAIGame = () => {
+    // Start music on user interaction
+    playMusic();
+    // Update settings with selected options
+    updateSettings({
+      startLevel,
+      showGhostPiece: showGhost
+    });
+    
+    // Start a new game with these settings
+    dispatch({
+      type: 'NEW_GAME',
+      settings: {
+        ...settings,
+        startLevel,
+        showGhostPiece: showGhost
+      }
+    });
+    
+    // Enable AI mode
+    toggleAI(true);
     
     // Switch to game view
     onStartGame();
@@ -109,6 +138,12 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
               className="btn btn-primary w-full transform transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
             >
               START GAME
+            </button>
+            <button 
+              onClick={handleStartAIGame} 
+              className="btn btn-primary w-full transform transition-all duration-300 hover:scale-105 bg-green-600 hover:bg-green-700 active:bg-green-800 shadow-[0_0_15px_rgba(22,163,74,0.5)]"
+            >
+              WATCH AI PLAY
             </button>
             <button 
               onClick={() => setView('highScores')} 

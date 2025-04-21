@@ -32,6 +32,7 @@ export type GameState = {
   linesCleared: number;
   gameOver: boolean;
   isPaused: boolean;
+  isAIActive?: boolean;
 };
 
 export type HighScore = {
@@ -39,6 +40,21 @@ export type HighScore = {
   level: number;
   linesCleared: number;
   date: string;
+};
+
+export type AISettings = {
+  enabled: boolean;
+  moveDelay: number; // Delay between AI moves in ms
+  linesClearedWeight: number; // Weight for valuing cleared lines
+  holesWeight: number; // Weight for penalizing holes
+  heightWeight: number; // Weight for penalizing height
+  bumpinessWeight: number; // Weight for penalizing bumpiness
+};
+
+export type AIMove = {
+  rotation: number; // Number of rotations to apply
+  targetX: number; // Target x position
+  hardDrop: boolean; // Whether to use hard drop or soft drop
 };
 
 export type GameSettings = {
@@ -56,6 +72,7 @@ export type GameSettings = {
     hardDrop: string;
     pause: string;
   };
+  ai: AISettings;
 };
 
 export type GameAction =
@@ -69,4 +86,5 @@ export type GameAction =
   | { type: 'PAUSE' }
   | { type: 'RESUME' }
   | { type: 'RESTART', settings: GameSettings }
-  | { type: 'NEW_GAME', settings: GameSettings };
+  | { type: 'NEW_GAME', settings: GameSettings }
+  | { type: 'TOGGLE_AI', enabled: boolean };

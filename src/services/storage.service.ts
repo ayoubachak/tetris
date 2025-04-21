@@ -21,6 +21,14 @@ const DEFAULT_SETTINGS: GameSettings = {
     hardDrop: 'Space',
     pause: 'Escape',
   },
+  ai: {
+    enabled: false,
+    moveDelay: 300,
+    linesClearedWeight: 0.8,
+    holesWeight: 0.7,
+    heightWeight: 0.3,
+    bumpinessWeight: 0.2
+  }
 };
 
 /**

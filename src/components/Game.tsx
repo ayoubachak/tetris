@@ -90,7 +90,7 @@ const Game: React.FC = () => {
             </div>
             
             {(gameOver || isPaused) && (
-              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center animate-fade-in">
+              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center animate-fade-in z-50">
                 <div className="text-center p-6 bg-gray-800 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 border-2 border-blue-500/50">
                   <h2 className="text-2xl font-bold mb-4">
                     {gameOver ? 'GAME OVER' : 'PAUSED'}

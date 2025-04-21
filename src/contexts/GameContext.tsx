@@ -93,6 +93,15 @@ export function GameProvider({ children }: GameProviderProps) {
     });
   }, []);
   
+  // Apply theme class on root element
+  useEffect(() => {
+    const root = document.documentElement;
+    // Remove any previous theme classes
+    ['theme-space','theme-desert','theme-nature','theme-city','theme-sea'].forEach(c => root.classList.remove(c));
+    // Add current theme class
+    root.classList.add(`theme-${settings.theme}`);
+  }, [settings.theme]);
+
   // Handle keyboard input
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

@@ -19,7 +19,7 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
     });
   };
   
-  const handleThemeChange = (theme: 'dark' | 'light') => {
+  const handleThemeChange = (theme: "space" | "desert" | "nature" | "city" | "sea") => {
     setLocalSettings({
       ...localSettings,
       theme,
@@ -74,15 +74,6 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
     }
   }, [listeningForKey, localSettings]);
   
-  // Apply theme changes immediately
-  useEffect(() => {
-    if (localSettings.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [localSettings.theme]);
-  
   return (
     <div className="game-container h-screen flex items-center justify-center">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-xl">
@@ -129,26 +120,23 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
               <label htmlFor="enableShadow">Enable block shadows</label>
             </div>
             
-            <div className="flex items-center gap-4">
-              <label>Theme:</label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleThemeChange('dark')}
-                  className={`px-3 py-1 rounded ${
-                    localSettings.theme === 'dark' ? 'bg-blue-600' : 'bg-gray-700'
-                  }`}
-                >
-                  Dark
-                </button>
-                <button
-                  onClick={() => handleThemeChange('light')}
-                  className={`px-3 py-1 rounded ${
-                    localSettings.theme === 'light' ? 'bg-blue-600' : 'bg-gray-700'
-                  }`}
-                >
-                  Light
-                </button>
-              </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="themeSelect" className="block text-sm text-gray-400">Theme</label>
+              <select
+                id="themeSelect"
+                value={localSettings.theme}
+                onChange={(e) => setLocalSettings({
+                  ...localSettings,
+                  theme: e.target.value as GameSettings['theme'],
+                })}
+                className="w-full bg-gray-700 text-white p-2 rounded"
+              >
+                <option value="space">Space</option>
+                <option value="desert">Desert</option>
+                <option value="nature">Nature</option>
+                <option value="city">City</option>
+                <option value="sea">Sea</option>
+              </select>
             </div>
           </div>
         </div>
@@ -191,4 +179,4 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
   );
 };
 
-export default Settings; 
+export default Settings;

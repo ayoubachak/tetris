@@ -11,7 +11,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   showGhostPiece: true,
   dropSpeed: 1.0,
   enableShadow: true,
-  theme: 'dark',
+  theme: 'space',
   controls: {
     moveLeft: 'ArrowLeft',
     moveRight: 'ArrowRight',
@@ -110,4 +110,4 @@ export const StorageService = {
   },
 };
 
-export default StorageService; 
+export default StorageService;

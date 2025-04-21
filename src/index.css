@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Oswald:wght@400;700&family=Nunito:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,6 +17,76 @@
     background-color: #000;
     color: white;
     font-family: 'Press Start 2P', system-ui, sans-serif;
+  }
+
+  /* Space theme background with stars */
+  .theme-space body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(33, 105, 165, 0.3) 0%, transparent 20%),
+      radial-gradient(circle at 80% 70%, rgba(165, 32, 124, 0.3) 0%, transparent 25%),
+      linear-gradient(to bottom, #000510 0%, #001336 100%);
+    z-index: -1;
+  }
+  .theme-space html, .theme-space body {
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  /* Desert theme: sandy gradient */
+  .theme-desert body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #fceabb 0%, #f8b500 100%);
+    z-index: -1;
+  }
+  .theme-desert html, .theme-desert body {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Nature theme: forest canopy */
+  .theme-nature body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #74ebd5 0%, #acb6e5 100%);
+    z-index: -1;
+  }
+  .theme-nature html, .theme-nature body {
+    font-family: 'Courier New', monospace;
+  }
+
+  /* City theme: night skyline */
+  .theme-city body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #3a3a3a 0%, #1a1a1a 100%);
+    z-index: -1;
+  }
+  .theme-city html, .theme-city body {
+    font-family: 'Oswald', sans-serif;
+  }
+
+  /* Sea theme: underwater */
+  .theme-sea body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #2e3192 0%, #1bffff 100%);
+    z-index: -1;
+  }
+  .theme-sea html, .theme-sea body {
+    font-family: 'Nunito', sans-serif;
   }
 
   /* Space-themed background */
@@ -193,6 +265,25 @@
   
   .control-btn-space {
     @apply bg-blue-800 border-blue-700 hover:bg-blue-700 hover:border-blue-600 active:bg-blue-900 active:border-blue-800;
+  }
+
+  /* Add subtle texture and color filters for each theme */
+  .theme-desert .tetris-board-container,
+  .theme-desert .game-grid > div {
+    filter: sepia(0.4) contrast(1.2) brightness(1.1);
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 5px);
+  }
+  .theme-nature .tetris-board-container,
+  .theme-nature .game-grid > div {
+    filter: hue-rotate(80deg) contrast(1.1);
+  }
+  .theme-city .tetris-board-container,
+  .theme-city .game-grid > div {
+    filter: drop-shadow(0 0 5px rgba(0,255,255,0.5));
+  }
+  .theme-sea .tetris-board-container,
+  .theme-sea .game-grid > div {
+    filter: hue-rotate(200deg) brightness(1.2) contrast(1.05);
   }
 }
 

@@ -46,7 +46,7 @@ export type GameSettings = {
   showGhostPiece: boolean;
   dropSpeed: number;
   enableShadow: boolean;
-  theme: 'dark' | 'light';
+  theme: 'space' | 'desert' | 'nature' | 'city' | 'sea';
   controls: {
     moveLeft: string;
     moveRight: string;
@@ -68,4 +68,4 @@ export type GameAction =
   | { type: 'PAUSE' }
   | { type: 'RESUME' }
   | { type: 'RESTART', settings: GameSettings }
-  | { type: 'NEW_GAME', settings: GameSettings }; 
+  | { type: 'NEW_GAME', settings: GameSettings };

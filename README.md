@@ -2,7 +2,7 @@
 
 A modern Tetris clone built with React, TypeScript, and Tailwind CSS.
 
-![Tetris Game Screenshot](https://via.placeholder.com/800x450.png?text=Tetris+Game+Screenshot)
+![Tetris Game Screenshot](media/tetris.png)
 
 ## Features
 

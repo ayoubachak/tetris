@@ -7,7 +7,8 @@ const defaultSettings: GameSettings = {
   showGhostPiece: true,
   dropSpeed: 1.0,
   enableShadow: true,
-  theme: 'dark',
+  theme: 'space',
+  volume: 0.5,
   controls: {
     moveLeft: 'ArrowLeft',
     moveRight: 'ArrowRight',
@@ -154,4 +155,4 @@ describe('GameService', () => {
       expect(GameService.isGameOver(grid)).toBe(false);
     });
   });
-}); 
+});

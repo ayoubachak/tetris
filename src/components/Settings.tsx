@@ -19,13 +19,6 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
     });
   };
   
-  const handleThemeChange = (theme: "space" | "desert" | "nature" | "city" | "sea") => {
-    setLocalSettings({
-      ...localSettings,
-      theme,
-    });
-  };
-  
   const handleToggleSetting = (key: keyof GameSettings) => {
     setLocalSettings({
       ...localSettings,

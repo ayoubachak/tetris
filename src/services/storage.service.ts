@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   dropSpeed: 1.0,
   enableShadow: true,
   theme: 'space',
+  volume: 0.5,
   controls: {
     moveLeft: 'ArrowLeft',
     moveRight: 'ArrowRight',

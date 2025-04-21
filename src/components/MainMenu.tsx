@@ -10,7 +10,7 @@ interface MainMenuProps {
 }
 
 const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
-  const { dispatch, settings, updateSettings } = useGame();
+  const { dispatch, settings, updateSettings, playMusic } = useGame();
   const [view, setView] = useState<MenuView>('main');
   const [startLevel, setStartLevel] = useState(settings.startLevel);
   const [showGhost, setShowGhost] = useState(settings.showGhostPiece);
@@ -37,6 +37,8 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
   }, [view]);
   
   const handleStartGame = () => {
+    // Start music on user interaction
+    playMusic();
     // Update settings with selected options
     updateSettings({
       startLevel,
@@ -138,4 +140,4 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
   return null;
 };
 
-export default MainMenu; 
+export default MainMenu;

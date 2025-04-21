@@ -35,7 +35,7 @@ A modern Tetris clone built with React, TypeScript, and Tailwind CSS.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/tetris.git
+git clone https://github.com/ayoubachak/tetris.git
 cd tetris
 ```
 
@@ -82,7 +82,7 @@ To deploy the game to GitHub Pages:
 1. Update the `homepage` field in `package.json` with your GitHub username:
 
 ```json
-"homepage": "https://yourusername.github.io/tetris"
+"homepage": "https://ayoubachak.github.io/tetris"
 ```
 
 2. Run the deploy script:

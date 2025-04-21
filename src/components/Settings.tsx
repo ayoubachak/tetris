@@ -138,6 +138,25 @@ const Settings: React.FC<SettingsProps> = ({ onBack }) => {
                 <option value="sea">Sea</option>
               </select>
             </div>
+            <div className="mt-4">
+              <label className="block text-sm text-gray-400 mb-1">
+                Music Volume ({Math.round(localSettings.volume * 100)}%)
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={localSettings.volume}
+                onChange={(e) =>
+                  setLocalSettings({
+                    ...localSettings,
+                    volume: parseFloat(e.target.value),
+                  })
+                }
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
         

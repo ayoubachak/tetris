@@ -47,6 +47,7 @@ export type GameSettings = {
   dropSpeed: number;
   enableShadow: boolean;
   theme: 'space' | 'desert' | 'nature' | 'city' | 'sea';
+  volume: number; // 0.0 - 1.0 music volume
   controls: {
     moveLeft: string;
     moveRight: string;

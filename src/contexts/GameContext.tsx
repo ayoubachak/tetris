@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
 import { GameState, GameAction, GameSettings } from '../types/tetris.types';
 import GameService from '../services/game.service';
 import StorageService from '../services/storage.service';
+import tetrisSound from '../assets/sound/tetris.mp3';
 
 interface GameContextType {
   state: GameState;
@@ -9,6 +10,7 @@ interface GameContextType {
   renderGrid: (showGhost: boolean) => React.ReactElement;
   settings: GameSettings;
   updateSettings: (settings: Partial<GameSettings>) => void;
+  playMusic: () => void;
 }
 
 // Create the context with undefined as default value
@@ -102,9 +104,29 @@ export function GameProvider({ children }: GameProviderProps) {
     root.classList.add(`theme-${settings.theme}`);
   }, [settings.theme]);
 
+  // Background music setup
+  const audioRef = useRef<HTMLAudioElement>(new Audio(tetrisSound));
+  useEffect(() => {
+    audioRef.current.loop = true;
+  }, []);
+  // Update volume when settings change
+  useEffect(() => {
+    audioRef.current.volume = settings.volume;
+  }, [settings.volume]);
+  // Play/pause music depending on game state
+  useEffect(() => {
+    if (!state.gameOver && !state.isPaused) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+  }, [state.gameOver, state.isPaused]);
+
   // Handle keyboard input
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      // Ensure audio is unlocked by user interaction
+      audioRef.current.play().catch(() => {});
       if (state.gameOver) return;
       
       const { controls } = settings;
@@ -257,6 +279,7 @@ export function GameProvider({ children }: GameProviderProps) {
         renderGrid,
         settings,
         updateSettings,
+        playMusic: () => { audioRef.current.play().catch(() => {}); }
       }}
     >
       {children}

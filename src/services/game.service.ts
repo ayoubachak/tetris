@@ -1,4 +1,4 @@
-import { Grid, Tetromino, Cell, Position, GameState, GameSettings } from '../types/tetris.types';
+import { Grid, Tetromino,  Position, GameState, GameSettings } from '../types/tetris.types';
 import TetrominoService from './tetromino.service';
 
 // Constants

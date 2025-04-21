@@ -17,6 +17,14 @@ const defaultSettings: GameSettings = {
     hardDrop: 'Space',
     pause: 'Escape',
   },
+  ai: {
+    enabled: false,
+    moveDelay: 1000,
+    linesClearedWeight: 1,
+    holesWeight: 1,
+    heightWeight: 1,
+    bumpinessWeight: 1,
+  },
 };
 
 describe('GameService', () => {

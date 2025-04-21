@@ -1,4 +1,4 @@
-import { GameState, Grid, Tetromino, TetrominoType, AISettings, AIMove } from '../types/tetris.types';
+import { GameState, Grid, Tetromino, AISettings, AIMove } from '../types/tetris.types';
 import GameService from './game.service';
 import TetrominoService from './tetromino.service';
 

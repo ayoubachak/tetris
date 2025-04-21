@@ -1,0 +1,297 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer base {
+  html, body {
+    @apply m-0 h-full overflow-hidden;
+    background-color: #000;
+    color: white;
+    font-family: 'Press Start 2P', system-ui, sans-serif;
+  }
+
+  /* Space-themed background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(33, 105, 165, 0.3) 0%, transparent 20%),
+      radial-gradient(circle at 80% 70%, rgba(165, 32, 124, 0.3) 0%, transparent 25%),
+      linear-gradient(to bottom, #000510 0%, #001336 100%);
+    z-index: -1;
+  }
+}
+
+@layer components {
+  /* Tetris block styling with direct colors - no CSS variables */
+  .tetris-i {
+    @apply bg-[#31C7EF] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-o {
+    @apply bg-[#F7D308] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-t {
+    @apply bg-[#AD4D9C] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-s {
+    @apply bg-[#42B642] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-z {
+    @apply bg-[#EF2029] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-j {
+    @apply bg-[#5A65AD] border border-white/20 shadow-inner shadow-white/30;
+  }
+  .tetris-l {
+    @apply bg-[#EF7921] border border-white/20 shadow-inner shadow-white/30;
+  }
+
+  /* Ghost piece styling with opacity */
+  .tetris-ghost {
+    @apply bg-black/5 border-2 backdrop-blur-sm;
+    box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.1);
+    animation: ghostPulse 1.5s ease-in-out infinite;
+  }
+
+  /* Ghost piece color hints - direct colors */
+  .ghost-i { 
+    @apply border-[#31C7EF]/90 bg-[#31C7EF]/15;
+  }
+  .ghost-o { 
+    @apply border-[#F7D308]/90 bg-[#F7D308]/15;
+  }
+  .ghost-t { 
+    @apply border-[#AD4D9C]/90 bg-[#AD4D9C]/15;
+  }
+  .ghost-s { 
+    @apply border-[#42B642]/90 bg-[#42B642]/15;
+  }
+  .ghost-z { 
+    @apply border-[#EF2029]/90 bg-[#EF2029]/15;
+  }
+  .ghost-j { 
+    @apply border-[#5A65AD]/90 bg-[#5A65AD]/15;
+  }
+  .ghost-l { 
+    @apply border-[#EF7921]/90 bg-[#EF7921]/15;
+  }
+
+  /* Game board container */
+  .tetris-board-container {
+    @apply mx-auto border-4 border-gray-700 rounded-md overflow-hidden shadow-lg;
+    width: 300px;
+    aspect-ratio: 1/2;
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 
+      0 0 20px rgba(0, 0, 0, 0.8),
+      inset 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Mobile-specific adjustments */
+  @media (max-width: 768px) {
+    .tetris-board-container {
+      width: 85vw;
+      max-width: 400px;
+      margin-bottom: 120px; /* Make room for mobile controls */
+    }
+    
+    .game-container {
+      @apply p-2;
+    }
+  }
+
+  /* Game grid styling */
+  .game-grid {
+    @apply grid h-full gap-0;
+  }
+
+  .game-grid > div {
+    @apply flex items-center justify-center rounded-sm;
+    aspect-ratio: 1/1;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-md transition-all font-medium uppercase tracking-wider;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-md hover:shadow-lg active:shadow-sm active:translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white shadow-md hover:shadow-lg active:shadow-sm active:translate-y-0.5;
+  }
+
+  .game-container {
+    @apply max-w-6xl mx-auto p-4;
+  }
+  
+  h1, h2, h3, h4 {
+    font-family: 'Press Start 2P', monospace;
+    @apply tracking-wide uppercase;
+  }
+
+  /* Card styling */
+  .game-card {
+    @apply bg-gray-800/90 p-4 rounded-lg shadow-lg backdrop-blur-sm;
+    border: 2px solid rgba(100, 100, 255, 0.2);
+    box-shadow: 
+      0 5px 15px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(50, 50, 255, 0.2),
+      inset 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Mobile controls */
+  .mobile-controls {
+    @apply fixed bottom-0 left-0 right-0 p-4 bg-gray-900/90 backdrop-blur-md flex justify-center gap-4 md:hidden z-50;
+  }
+  
+  .control-btn {
+    @apply w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center text-white shadow-lg active:scale-95 transition-transform border-2 border-gray-700;
+    touch-action: manipulation;
+  }
+  
+  .control-btn-left {
+    @apply border-r-4 border-r-gray-600 hover:border-r-blue-500 active:border-r-blue-600;
+  }
+  
+  .control-btn-right {
+    @apply border-l-4 border-l-gray-600 hover:border-l-blue-500 active:border-l-blue-600;
+  }
+  
+  .control-btn-rotate {
+    @apply border-t-4 border-t-gray-600 hover:border-t-blue-500 active:border-t-blue-600;
+  }
+  
+  .control-btn-down {
+    @apply border-b-4 border-b-gray-600 hover:border-b-blue-500 active:border-b-blue-600;
+  }
+  
+  .control-btn-space {
+    @apply bg-blue-800 border-blue-700 hover:bg-blue-700 hover:border-blue-600 active:bg-blue-900 active:border-blue-800;
+  }
+}
+
+/* Animations */
+@keyframes line-clear {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0; background-color: white; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fallUnison {
+  0% { transform: translateY(-5px); opacity: 0.7; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
+
+@keyframes ghostPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+}
+
+.animate-line-clear {
+  animation: line-clear 0.5s ease-in-out;
+}
+
+.animate-fall-together {
+  animation: fallUnison 0.25s ease-out;
+}
+
+.animate-rotate {
+  animation: rotate 0.3s ease-in-out;
+}
+
+.animate-glow {
+  animation: glow 1.5s infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in-out forwards;
+}
+
+.animate-float {
+  animation: floating 6s ease-in-out infinite;
+}
+
+/* Add glow effect to active pieces */
+.tetris-i, .tetris-o, .tetris-t, .tetris-s, .tetris-z, .tetris-j, .tetris-l {
+  position: relative;
+}
+
+.tetris-i:after, .tetris-o:after, .tetris-t:after, .tetris-s:after, .tetris-z:after, .tetris-j:after, .tetris-l:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tetris-i:hover:after, .tetris-o:hover:after, .tetris-t:hover:after, .tetris-s:hover:after, .tetris-z:hover:after, .tetris-j:hover:after, .tetris-l:hover:after {
+  opacity: 1;
+}
+
+/* Background stars */
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  width: 2px;
+  height: 2px;
+  animation: starTwinkle 3s ease-in-out infinite;
+}
+
+/* Text colors for tetris pieces in headings - direct colors */
+.text-tetris-i { @apply text-[#31C7EF]; }
+.text-tetris-o { @apply text-[#F7D308]; }
+.text-tetris-t { @apply text-[#AD4D9C]; }
+.text-tetris-s { @apply text-[#42B642]; }
+.text-tetris-z { @apply text-[#EF2029]; }
+.text-tetris-j { @apply text-[#5A65AD]; }
+.text-tetris-l { @apply text-[#EF7921]; }

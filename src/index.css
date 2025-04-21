@@ -98,6 +98,13 @@
       inset 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
+  .tetris-board-container,
+  .game-grid {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+
   /* Mobile-specific adjustments */
   @media (max-width: 768px) {
     .tetris-board-container {
@@ -114,11 +121,14 @@
   /* Game grid styling */
   .game-grid {
     @apply grid h-full gap-0;
+    grid-auto-rows: minmax(0, 1fr);
   }
 
   .game-grid > div {
     @apply flex items-center justify-center rounded-sm;
     aspect-ratio: 1/1;
+    outline: 1px solid transparent;
+    will-change: transform;
   }
 
   .btn {

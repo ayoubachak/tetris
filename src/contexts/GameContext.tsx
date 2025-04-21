@@ -190,7 +190,7 @@ export function GameProvider({ children }: GameProviderProps) {
     
     // Render the grid
     return (
-      <div className="game-grid grid-cols-10">
+      <div className="game-grid bg-gray-900 grid-cols-10">
         {displayGrid.map((row, y) =>
           row.map((cell, x) => {
             // Determine cell classes based on state
@@ -229,7 +229,7 @@ export function GameProvider({ children }: GameProviderProps) {
             return (
               <div
                 key={`${y}-${x}`}
-                className={`w-full pb-[100%] relative ${cellClasses.join(' ')}`}
+                className={`w-full aspect-square ${cellClasses.join(' ')}`}
                 style={depthStyle}
                 data-piece-type={cell ? cell.type.toLowerCase() : 'empty'}
               />

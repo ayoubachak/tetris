@@ -254,7 +254,8 @@ export function GameProvider({ children }: GameProviderProps) {
               animationDelay: isActivePiece ? '0s' : '0s', // Same delay for all active pieces
               boxShadow: cell && !cell.ghost ? `inset 0 0 5px rgba(255, 255, 255, 0.3)` : '',
               // Add dashed border for ghost pieces
-              borderStyle: cell && cell.ghost ? 'dashed' : 'solid'
+              borderStyle: cell && cell.ghost ? 'dashed' : 'solid',
+              opacity: cell && cell.ghost ? 0.7 : 1
             };
 
             return (
@@ -263,6 +264,7 @@ export function GameProvider({ children }: GameProviderProps) {
                 className={`w-full aspect-square ${cellClasses.join(' ')}`}
                 style={depthStyle}
                 data-piece-type={cell ? cell.type.toLowerCase() : 'empty'}
+                data-is-ghost={cell && cell.ghost ? 'true' : 'false'}
               />
             );
           })

@@ -3,9 +3,10 @@ import { Tetromino } from '../types/tetris.types';
 
 interface NextPieceProps {
   piece: Tetromino;
+  isMobile?: boolean;
 }
 
-const NextPiece: React.FC<NextPieceProps> = ({ piece }) => {
+const NextPiece: React.FC<NextPieceProps> = ({ piece, isMobile = false }) => {
   // Determine grid size based on the tetromino type
   const gridSize = piece.type === 'I' || piece.type === 'O' ? 4 : 3;
   
@@ -30,15 +31,25 @@ const NextPiece: React.FC<NextPieceProps> = ({ piece }) => {
     }
   }
   
+  // Size classes based on mobile or desktop view
+  const sizeClasses = isMobile 
+    ? `w-20 h-20` // Smaller for mobile
+    : `w-28 h-28`; // Larger for desktop
+
+  // Padding and gap sizes based on mobile or desktop
+  const paddingClass = isMobile ? '' : 'p-3';
+  const gapClass = isMobile ? 'gap-0.5' : 'gap-1';
+  const bgClass = isMobile ? '' : 'bg-gray-900 rounded-md shadow-inner';
+  
   return (
-    <div className="bg-gray-900 p-3 rounded-md shadow-inner">
+    <div className={`${bgClass} ${paddingClass}`}>
       <div 
-        className={`grid gap-1 ${gridSize === 4 ? 'grid-cols-4' : 'grid-cols-3'} mx-auto w-28 h-28`}
+        className={`grid ${gapClass} ${gridSize === 4 ? 'grid-cols-4' : 'grid-cols-3'} mx-auto ${sizeClasses}`}
       >
         {grid.map((row, y) =>
           row.map((cell, x) => {
             // Determine the class based on the cell type
-            const pieceClass = cell ? `tetris-${cell.toLowerCase()}` : 'bg-gray-900/70';
+            const pieceClass = cell ? `tetris-${cell.toLowerCase()}` : (isMobile ? 'bg-transparent' : 'bg-gray-900/70');
             
             return (
               <div

@@ -119,6 +119,8 @@
     @apply bg-black/5 border-2 backdrop-blur-sm;
     box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.1);
     animation: ghostPulse 1.5s ease-in-out infinite;
+    opacity: 0.7;
+    z-index: 5;
   }
 
   /* Ghost piece color hints - direct colors */
@@ -153,6 +155,8 @@
     box-shadow: 
       0 0 20px rgba(0, 0, 0, 0.8),
       inset 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 20;
   }
 
   .tetris-board-container,
@@ -163,15 +167,146 @@
   }
 
   /* Mobile-specific adjustments */
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .tetris-board-container {
-      width: 85vw;
-      max-width: 400px;
-      margin-bottom: 120px; /* Make room for mobile controls */
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      aspect-ratio: 1/2;
+      margin: 0 auto;
+      transform: scale(1);
+      transform-origin: center;
+      position: relative;
+      z-index: 10;
     }
     
     .game-container {
       @apply p-2;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 150px; /* Space for controls */
+      position: relative;
+    }
+    
+    .mobile-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)); /* For notched phones */
+      background-color: rgba(30, 41, 59, 0.9);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(100, 116, 139, 0.4);
+      z-index: 5; /* Lower than canvas */
+      gap: 16px;
+    }
+    
+    .control-btn {
+      width: 5rem;
+      height: 5rem;
+      min-width: 5rem;
+      min-height: 5rem;
+    }
+    
+    .control-icon {
+      @apply w-12 h-12;
+    }
+    
+    .game-card-mobile {
+      background: none;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+    
+    /* Make mobile layout more comfortable */
+    .mobile-game-layout {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      height: calc(100vh - 200px); /* Increased space for controls */
+      max-height: 80vh;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .mobile-side-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 20px;
+    }
+  }
+  
+  /* Tablet screens */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .tetris-board-container {
+      max-width: 400px;
+      height: auto;
+    }
+    
+    .control-btn {
+      width: 5.5rem;
+      height: 5.5rem;
+      min-width: 5.5rem;
+      min-height: 5.5rem;
+    }
+    
+    .control-icon {
+      @apply w-14 h-14;
+    }
+  }
+
+  /* Smaller phones */
+  @media (max-width: 640px) {
+    .mobile-game-layout {
+      grid-template-columns: auto 1fr auto;
+    }
+    
+    .tetris-board-container {
+      max-height: calc(100vh - 150px);
+      max-width: 300px;
+    }
+    
+    .control-btn {
+      width: 4.5rem;
+      height: 4.5rem;
+      min-width: 4.5rem;
+      min-height: 4.5rem;
+    }
+    
+    .control-icon {
+      @apply w-10 h-10;
+    }
+  }
+
+  /* Very small screens */
+  @media (max-width: 360px) {
+    .mobile-game-layout {
+      grid-template-columns: auto 1fr auto;
+      height: calc(100vh - 150px);
+      gap: 8px;
+    }
+    
+    .tetris-board-container {
+      transform: scale(0.95);
+      max-width: 280px;
+    }
+    
+    .control-btn {
+      width: 4rem;
+      height: 4rem;
+      min-width: 4rem;
+      min-height: 4rem;
+    }
+    
+    .control-icon {
+      @apply w-9 h-9;
     }
   }
 
@@ -205,6 +340,11 @@
 
   .game-container {
     @apply max-w-6xl mx-auto p-4;
+    position: relative;
+    overflow-x: hidden;
+    z-index: 1;
+    width: 100%;
+    max-width: 100vw;
   }
   
   h1, h2, h3, h4 {
@@ -224,11 +364,17 @@
   
   /* Mobile controls */
   .mobile-controls {
-    @apply fixed bottom-0 left-0 right-0 p-4 bg-gray-900/90 backdrop-blur-md flex justify-center gap-4 md:hidden z-50;
+    @apply fixed bottom-0 left-0 right-0 p-4 bg-gray-900/90 backdrop-blur-md flex justify-center gap-5 lg:hidden;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)); /* For notched phones */
+    z-index: 10 !important;
   }
   
   .control-btn {
-    @apply w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center text-white shadow-lg active:scale-95 transition-transform border-2 border-gray-700;
+    @apply rounded-full bg-gray-800 flex items-center justify-center text-white shadow-lg active:scale-95 transition-transform border-2 border-gray-700;
+    width: 4.5rem;
+    height: 4.5rem; 
+    min-width: 4.5rem;
+    min-height: 4.5rem;
     touch-action: manipulation;
   }
   
@@ -329,6 +475,54 @@
     background-image: radial-gradient(circle at 50% 50%, transparent 40%, rgba(255,255,255,0.08) 41%);
     background-size: 20px 20px;
     border-radius: 4px;
+  }
+
+  /* Mobile game card styling */
+  .game-card-mobile {
+    @apply bg-gray-800/90 p-2 rounded-lg shadow-md backdrop-blur-sm;
+    border: 1px solid rgba(100, 100, 255, 0.2);
+  }
+  
+  /* Small button variant for mobile */
+  .btn-sm {
+    @apply px-2 py-1 text-xs rounded-md;
+  }
+  
+  /* Control icon sizing */
+  .control-icon {
+    @apply w-12 h-12;
+  }
+  
+  /* Mobile game layout */
+  .mobile-game-layout {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    height: calc(100vh - 200px); /* Increased space for controls */
+    max-height: 80vh;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .mobile-side-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+  
+  .mobile-board-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 20;
+    margin-bottom: 80px; /* Add space at the bottom for controls */
   }
 }
 
@@ -441,3 +635,53 @@
 .text-tetris-z { @apply text-[#EF2029]; }
 .text-tetris-j { @apply text-[#5A65AD]; }
 .text-tetris-l { @apply text-[#EF7921]; }
+
+/* Improved responsive sizing for iPad Pro and other large tablets */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .tetris-board-container {
+    width: 350px;
+  }
+}
+
+/* Medium tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tetris-board-container {
+    width: 320px;
+  }
+  
+  .mobile-game-layout {
+    padding-bottom: 100px;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-game-layout {
+    grid-template-columns: 1fr 3fr 1fr;
+    height: auto;
+    padding-bottom: 100px;
+  }
+  
+  .control-btn {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    min-width: 3.5rem !important;
+    min-height: 3.5rem !important;
+  }
+  
+  .control-icon {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  
+  .tetris-board-container {
+    max-height: 80vh;
+  }
+}
+
+/* Fix the scrollbar issue */
+html, body, #root {
+  @apply overflow-x-hidden;
+  width: 100%;
+  max-width: 100vw;
+}

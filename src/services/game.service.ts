@@ -49,32 +49,38 @@ export const GameService = {
   },
   
   /**
-   * Project a tetromino onto the grid
+   * Project a tetromino onto the grid without permanently placing it
    */
   projectTetrominoOnGrid(
     grid: Grid, 
     tetromino: Tetromino, 
     isGhost = false
   ): Grid {
-    // Create a copy of the grid
+    // Create a copy of the grid to avoid modifying the original
     const newGrid = grid.map(row => [...row]);
-    const { shape, position, type } = tetromino;
     
-    for (let y = 0; y < shape.length; y++) {
-      for (let x = 0; x < shape[y].length; x++) {
-        if (shape[y][x]) {
-          const newY = position.y + y;
-          const newX = position.x + x;
+    // Loop through each cell of the tetromino shape
+    for (let y = 0; y < tetromino.shape.length; y++) {
+      for (let x = 0; x < tetromino.shape[y].length; x++) {
+        if (tetromino.shape[y][x]) {
+          const newY = tetromino.position.y + y;
+          const newX = tetromino.position.x + x;
           
-          // Only add to grid if within bounds
+          // Skip cells that would be above the grid (during spawn)
+          if (newY < 0) continue;
+          
+          // Place the cell on the grid if it's within bounds
           if (
             newY >= 0 && 
-            newY < BOARD_HEIGHT && 
+            newY < newGrid.length && 
             newX >= 0 && 
-            newX < BOARD_WIDTH
+            newX < newGrid[0].length
           ) {
-            const cell: Cell = { type, ghost: isGhost };
-            newGrid[newY][newX] = cell;
+            // Set the cell value (with ghost flag if this is a ghost piece)
+            newGrid[newY][newX] = { 
+              type: tetromino.type,
+              ...(isGhost && { ghost: true })
+            };
           }
         }
       }
